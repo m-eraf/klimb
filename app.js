@@ -34,14 +34,13 @@ app.post('/', upload.single('excel'), async (req, res) => {
       var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name]);
 
       async.eachSeries(xlData, function (data, innerCallback) {
-        excelSchema.findOne({ name: data.name, email: data.email, no: data.no }, async function (err, result) {
+        excelSchema.findOne({ "Name of the Candidate": data["Name of the Candidate"], Email: data.Email, "Mobile No.": data["Mobile No."] }, async function (err, result) {
           if (err) {
             console.log(err);
             return innerCallback(err);
           }
           if (result) {
-            console.log("duplicate Data Found");
-            return innerCallback("Data Already exist ");
+            return innerCallback("Duplicate Data Found  ");
           } else {
             await excelSchema.create(data);
           }
